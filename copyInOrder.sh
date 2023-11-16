@@ -73,12 +73,27 @@ echo "verbose: $v, force: $f, debug: $d, in: $1, out: $outFile"
 sourcedir=
 destdir=
 
+#for folder in (ls "$sourcedir"); do
+#    echo "Creating $folder";
+#    mkdir "$destdir/$folder";
+#    for file in (ls "$destdir/$folder"); do
+#        echo "Copying $file";
+#        cp "$folder"/"$file" "$destdir"/"$folder"/;
+#    done;
+#done
 
-for folder in (ls "$sourcedir"); do
-    echo "Creating $folder";
-    mkdir "$destdir/$folder";
-    for file in (ls "$destdir/$folder"); do
-        echo "Copying $file";
-        cp "$folder"/"$file" "$destdir"/"$folder"/;
-    done;
+#Actual script here
+printf "Starting copy...\n"
+for folder in (find -type d -print | sort | cut -c 3- | tail -n +2); do
+    printf "\33[2K\r"
+    printf "Creating folder $folder\n"
+    mkdir "/run/media/arle/AUTORADIO/$folder"
+    for file in (ls "$folder"); do
+        printf "\33[2K\r"
+        printf " Copying %s\r" $file
+        cp "./$folder/$file" "/run/media/arle/AUTORADIO/$folder/" 2>/dev/null
+    done
+
 done
+printf "\33[K2\r"
+printf "Done!"
